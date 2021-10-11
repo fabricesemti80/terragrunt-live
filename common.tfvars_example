@@ -1,0 +1,5 @@
+#! ALL .tfvars FILES ARE EXEMPT FROM GIT FOR SECURITY!
+provider_vsphere_host     = "<VSPHERE HOST DNS OR IP GOES HERE>"
+provider_vsphere_username = "administrator@vsphere.local"
+provider_vsphere_password = "<VSPHERE USER PASSWORD GOES HERE (SHOULD MATCH TO THE USER FROM THE PREVIOUS LINE)>"
+

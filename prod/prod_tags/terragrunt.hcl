@@ -7,7 +7,7 @@ terraform {
 
 include {
   # https://terragrunt.gruntwork.io/docs/features/keep-your-terraform-code-dry/
-  path = find_in_parent_folders("prod.hcl")
+  path = find_in_parent_folders("common.hcl")
 }
 
 inputs = {

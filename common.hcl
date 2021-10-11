@@ -33,8 +33,7 @@ terraform {
     # https://terragrunt.gruntwork.io/docs/reference/built-in-functions/
     commands = get_terraform_commands_that_need_vars()
     arguments = [
-      "-var-file=${get_parent_terragrunt_dir()}/../common.tfvars"
-      # "-var-file=${get_parent_terragrunt_dir()}/prod.tfvars"
+      "-var-file=${get_parent_terragrunt_dir()}/common.tfvars"
     ]
   }
 }
