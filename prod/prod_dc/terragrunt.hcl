@@ -33,7 +33,7 @@ inputs = {
   previous_server_index     = 0
   vm_folder                 = "AL-Local-VMs"
   guest_vcpu                = 4
-  guest_memory              = 8196
+  guest_memory              = 8192
   ip_first_address          = 11
   domain_selector           = "XMA"
 }

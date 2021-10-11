@@ -48,7 +48,7 @@ variable "network-setup" {
   default = {
     # default for BN
     "SVWPserver00" = {
-            "ip_network_prefix"  = "10.171.16."
+      "ip_network_prefix"  = "10.171.16."
       "ip_network_gateway" = "10.171.16.1"
       "ip_netmask"         = "24" # "The IPv4 subnet mask, in bits (example: 24 for 255.255.255.0)."
       # "deploy_vsphere_network" = "SVWTserver01"
@@ -64,6 +64,12 @@ variable "network-setup" {
     "ANDCserver06" = {
       "ip_network_prefix"  = "10.163.22."
       "ip_network_gateway" = "10.163.22.1"
+      "ip_netmask"         = "24" # "The IPv4 subnet mask, in bits (example: 24 for 255.255.255.0)."
+      # "deploy_vsphere_network" = "ANDCserver06"
+    }
+    "ANDCserver00" = {
+      "ip_network_prefix"  = "10.163.16."
+      "ip_network_gateway" = "10.163.16.1"
       "ip_netmask"         = "24" # "The IPv4 subnet mask, in bits (example: 24 for 255.255.255.0)."
       # "deploy_vsphere_network" = "ANDCserver06"
     }
