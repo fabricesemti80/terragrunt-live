@@ -56,15 +56,15 @@ resource "vsphere_virtual_machine" "cloned_virtual_machine" {
         auto_logon            = true
         auto_logon_count      = 1
         run_once_command_list = [
-          # * set up WinRM
+          #! ENSURE WINRM SERVICE IS RUNNING
           "winrm set winrm/config @{MaxEnvelopeSizekb=\"100000\"}",
           "winrm set winrm/config/Service @{AllowUnencrypted=\"true\"}",
           "winrm set winrm/config/Service/Auth @{Basic=\"true\"}",
           "Start-Service WinRM",
           "Set-service WinRM -StartupType Automatic",
-          # * turn on firewall
+          #! ENSURE WINDOWS FIREWALL IS TURNED ON
           "Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled true",
-          # * enable MSTSC
+          #! ENSURE RDP IS ENABLED
           "Set-ItemProperty -Path 'HKLM:/System/CurrentControlSet/Control/Terminal Server' -name 'fDenyTSConnections' -Value 0",
           "netsh advfirewall firewall add rule name='allow RemoteDesktop' dir=in protocol=TCP localport=3389 action=allow"
         ]
