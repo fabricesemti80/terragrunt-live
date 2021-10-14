@@ -23,11 +23,11 @@ dependency "prod_tag" {
 }
 inputs = {
   tag_id                    = dependency.prod_tag.outputs.vsphere_tag_id
-  deploy_vsphere_datastore  = "ALWNAS003-DataStore001" #! ONLY cluster002 has access to NAS datastores currently (10/2021)
+  deploy_vsphere_datastore  = "ALWNAS003-DataStore001" #? ONLY cluster002 has access to NAS datastores currently (10/2021)
   deploy_vsphere_datacenter = "ALW"
-  template_vm               = "alw_2019_gui_NAS" #! _NAS is placed on the NAS, in order to speed up cloning when creating VM-s on the NAS storage
+  template_vm               = "alw_2019_gui_NAS" #? _NAS is placed on the NAS, in order to speed up cloning when creating VM-s on the NAS storage
   deploy_vsphere_network    = "ANDCserver00"
-  deploy_vsphere_cluster    = "ALWCLESX002" #! ONLY cluster002 has access to NAS datastores currently (10/2021)
+  deploy_vsphere_cluster    = "ALWCLESX002" #? ONLY cluster002 has access to NAS datastores currently (10/2021)
   deploy_vsphere_datacenter = "ALW"
   instance_count            = 2
   vm_name_prefix            = "ANWDFS00"
