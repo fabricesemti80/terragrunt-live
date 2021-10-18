@@ -1,6 +1,8 @@
 #! <<<IMPORTANT>>> references:
 #! https://github.com/hashicorp/terraform/issues/19853
 #! https://github.com/hashicorp/terraform-provider-vsphere/issues/832
+#! https://pscustomobject.github.io/powershell/howto/PowerShell-Create-Credential-Object/
+#! https://kevsoft.net/2019/04/26/multi-line-powershell-in-terraform.html
 locals {
   time = timestamp()
 }
@@ -71,19 +73,23 @@ resource "vsphere_virtual_machine" "cloned_virtual_machine" {
         admin_password        = var.guest_local_admin_password
         auto_logon            = true
         auto_logon_count      = 1
-        run_once_command_list = [
-          #! ENSURE WINRM SERVICE IS RUNNING
-          "winrm set winrm/config @{MaxEnvelopeSizekb=\"100000\"}",
-          "winrm set winrm/config/Service @{AllowUnencrypted=\"true\"}",
-          "winrm set winrm/config/Service/Auth @{Basic=\"true\"}",
-          "Start-Service WinRM",
-          "Set-service WinRM -StartupType Automatic",
-          #! ENSURE WINDOWS FIREWALL IS TURNED ON
-          "Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled true",
-          #! ENSURE RDP IS ENABLED
-          "Set-ItemProperty -Path 'HKLM:/System/CurrentControlSet/Control/Terminal Server' -name 'fDenyTSConnections' -Value 0",
-          "netsh advfirewall firewall add rule name='allow RemoteDesktop' dir=in protocol=TCP localport=3389 action=allow"
-        ]
+        # run_once_command_list = [
+        #   #! TEST
+        #   "mkdir c:\\admin", 
+        #   "echo 'I am CMD - runonce-test' >> c:\\admin\\cmd_logs.txt",
+        #   "'I am PowerShell - runonce-test' |Out-File c:\\admin\\ps_logs.txt -Force",
+        #   #! ENSURE WINRM SERVICE IS RUNNING
+        #   "winrm set winrm/config @{MaxEnvelopeSizekb=\"100000\"}",
+        #   "winrm set winrm/config/Service @{AllowUnencrypted=\"true\"}",
+        #   "winrm set winrm/config/Service/Auth @{Basic=\"true\"}",
+        #   "Start-Service WinRM",
+        #   "Set-service WinRM -StartupType Automatic",
+        #   #! ENSURE WINDOWS FIREWALL IS TURNED ON
+        #   "Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled true",
+        #   #! ENSURE RDP IS ENABLED
+        #   "Set-ItemProperty -Path 'HKLM:/System/CurrentControlSet/Control/Terminal Server' -name 'fDenyTSConnections' -Value 0",
+        #   "netsh advfirewall firewall add rule name='allow RemoteDesktop' dir=in protocol=TCP localport=3389 action=allow"
+        # ]
       }
       network_interface {
         ipv4_address = "${var.network-setup[var.deploy_vsphere_network].ip_network_prefix}${var.ip_first_address + count.index}"
@@ -93,6 +99,22 @@ resource "vsphere_virtual_machine" "cloned_virtual_machine" {
       ipv4_gateway    = var.network-setup[var.deploy_vsphere_network].ip_network_gateway
       dns_server_list = var.domain-setup[var.domain_selector].guest_dns_servers
     }
+  }
+  provisioner "local-exec" {
+    command = <<EOT
+      Write-Host "$(Get-Date) - Starting customization"
+      #----- PARAMETERS FOR THE CONFIGURATION
+      [string]$comp_name = "${self.name}.${var.domain-setup[var.domain_selector].guest_domain}"
+      [string]$userName = "${var.domain_logon}"
+      [string]$userPassword = "${var.domain_password}"
+      [securestring]$secStringPassword = ConvertTo-SecureString $userPassword -AsPlainText -Force
+      [pscredential]$credObject = New-Object System.Management.Automation.PSCredential ($userName, $secStringPassword)
+      #----- EXECUTE THE FILE
+      Write-Host "Target will be: $comp_name. Executing as: $userName"
+      Invoke-Command -FilePath ".\scripts\provisioner.ps1" -ComputerName $comp_name -Credential $credObject
+      Write-Host "$(Get-Date) - Finishing customization"
+    EOT
+    interpreter = ["PowerShell", "-Command"]
   }
   hardware_version = var.hardware_version
   lifecycle {

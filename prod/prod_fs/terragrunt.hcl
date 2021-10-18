@@ -37,4 +37,18 @@ inputs = {
   guest_memory              = 4096
   ip_first_address          = 110
   domain_selector           = "WC"
+  #? DO NOT REMOVE THE FOLLOWING BLOCK. 
+  #? UNCOMMENT, IF YOU NEED TO ADD 1 / MORE DATA DISKS WITH THE VM
+  #? THE EXAMPLE BLOCK ADDS TWO DISKS TO THE VM, WITH UNIT NUMBER 1 & 2, 11 GB AND 22 GB
+  # disk_size = [
+  #    {
+  #     size   = 11,
+  #     number = 1
+  #   },
+  #    {
+  #     size   = 22,
+  #     number = 2
+  #   }
+  # ]
+  #? 
 }
