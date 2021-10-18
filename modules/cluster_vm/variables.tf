@@ -107,3 +107,15 @@ variable "ip_first_address" {
 variable "tag_id" {
   description = "ID of the new tag"
 }
+variable "disk_size" {
+  type    = list
+  default = null
+  #? CURRENT DEFAULT IS NOT TO ADD ADDITIONAL DISKS
+  # default = [
+  #   {
+  #     size   = 50,
+  #     number = 1
+  #   }
+  #   ]
+}
+#?

@@ -1,0 +1,5 @@
+#! ALL .tfvars FILES ARE EXEMPT FROM GIT FOR SECURITY!
+guest_local_admin_username = "administrator"
+guest_local_admin_password = "<LOCAL ADMIN PASSWORD GOES HERE!>"
+domain_logon               = "<DOMAIN ADMIN USERNAME GOES HERE!>"
+domain_password            = "<DOMAIN ADMIN PASSWORD GOES HERE!>"

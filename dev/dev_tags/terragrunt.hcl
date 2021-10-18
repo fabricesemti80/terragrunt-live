@@ -11,7 +11,7 @@ include {
 }
 
 inputs = {
-  deploy_vsphere_tag_category   = "PROD-CATEGORY-Terraform"
-  deploy_vsphere_tag            = "PRODUCTION-Terraform"
-  deploy_vsphere_tag_decription = "Production infrastructure managed by Terraform (for any changes on this resource, please contact fabrice.semti@westcoast.co.uk first!)"
+  deploy_vsphere_tag_category   = "DEV-CATEGORY-Terraform"
+  deploy_vsphere_tag            = "DEVELOPMENT-Terraform"
+  deploy_vsphere_tag_decription = "DEVELOPMENT infrastructure managed by Terraform (for any changes on this resource, please contact fabrice.semti@westcoast.co.uk first!)"
 }

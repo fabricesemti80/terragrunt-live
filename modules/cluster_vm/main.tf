@@ -1,3 +1,6 @@
+#! <<<IMPORTANT>>> references:
+#! https://github.com/hashicorp/terraform/issues/19853
+#! https://github.com/hashicorp/terraform-provider-vsphere/issues/832
 locals {
   time = timestamp()
 }
@@ -42,6 +45,19 @@ resource "vsphere_virtual_machine" "cloned_virtual_machine" {
     eagerly_scrub    = data.vsphere_virtual_machine.template_vm.disks[0].eagerly_scrub
     thin_provisioned = data.vsphere_virtual_machine.template_vm.disks[0].thin_provisioned
   }
+    #? SEE REFERENCES!
+   dynamic "disk" {
+    for_each = var.disk_size == null ? [] :[for d in var.disk_size: {
+      size   = d.size
+      number = d.number
+    }]
+    content {
+      label            = format("disk%s", disk.value.number)
+      size             = disk.value.size
+      unit_number      = disk.value.number
+    }
+  }
+  #?
   #tags = [vsphere_tag.tag.id] # COMMENT THIS LINE TO OMIT TAG/CATEGORY
   tags = [var.tag_id]
   clone {
