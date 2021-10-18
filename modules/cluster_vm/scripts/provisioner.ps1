@@ -1,11 +1,12 @@
+$date_now = $(Get-Date -Format dd-MM-yyyy)
 #
 # ─── TEST ───────────────────────────────────────────────────────────────────────
 #
 $admin_folder = 'c:\admin'
 if (-not (Test-Path $admin_folder -ErrorAction SilentlyContinue) ) {
-    New-Item -Path $admin_folder -ItemType Directory -Force
+    New-Item -Path $admin_folder -ItemType Directory -Force -Verbose | Out-Null
 }
-'PowerShell was here' | Out-File "$admin_folder\ps.txt"
+"This server was deployed using Terraform on $date_now " | Out-File "$admin_folder\ps_actions.txt"
 #
 # # ─── ENSURE WINRM SERVICE IS RUNNING ────────────────────────────────────────────
 # #
@@ -16,6 +17,7 @@ if (-not (Test-Path $admin_folder -ErrorAction SilentlyContinue) ) {
 # ─── ENSURE WINDOWS FIREWALL IS TURNED ON ───────────────────────────────────────
 #
 Set-NetFirewallProfile -Profile Domain, Public, Private -Enabled true -Confirm: $false
+'All firewall profiles enabled' | Out-File "$admin_folder\ps_actions.txt"
 #
 # ─── ENSURE RDP IS ENABLED ──────────────────────────────────────────────────────
 #
@@ -30,6 +32,7 @@ catch {
     netsh advfirewall firewall add rule name='allow RemoteDesktop' dir=in protocol=TCP localport=3389 action=allow
     Continue
 }
+'Remote Desktop Enabled' | Out-File "$admin_folder\ps_actions.txt"
 #
 # ─── SHOW HIDDEEN AND SYSYTEM FILES ─────────────────────────────────────────────
 #
@@ -55,3 +58,4 @@ $splat = @{
     Value = 0
 }
 Set-ItemProperty @splat -Confirm: $false
+'Hidden and system files set to visible' | Out-File "$admin_folder\ps_actions.txt"
