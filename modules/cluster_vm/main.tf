@@ -48,7 +48,7 @@ resource "vsphere_virtual_machine" "cloned_virtual_machine" {
     thin_provisioned = data.vsphere_virtual_machine.template_vm.disks[0].thin_provisioned
   }
     #? SEE REFERENCES!
-   dynamic "disk" {
+  dynamic "disk" {
     for_each = var.disk_size == null ? [] :[for d in var.disk_size: {
       size   = d.size
       number = d.number
@@ -73,23 +73,6 @@ resource "vsphere_virtual_machine" "cloned_virtual_machine" {
         admin_password        = var.guest_local_admin_password
         auto_logon            = true
         auto_logon_count      = 1
-        # run_once_command_list = [
-        #   #! TEST
-        #   "mkdir c:\\admin", 
-        #   "echo 'I am CMD - runonce-test' >> c:\\admin\\cmd_logs.txt",
-        #   "'I am PowerShell - runonce-test' |Out-File c:\\admin\\ps_logs.txt -Force",
-        #   #! ENSURE WINRM SERVICE IS RUNNING
-        #   "winrm set winrm/config @{MaxEnvelopeSizekb=\"100000\"}",
-        #   "winrm set winrm/config/Service @{AllowUnencrypted=\"true\"}",
-        #   "winrm set winrm/config/Service/Auth @{Basic=\"true\"}",
-        #   "Start-Service WinRM",
-        #   "Set-service WinRM -StartupType Automatic",
-        #   #! ENSURE WINDOWS FIREWALL IS TURNED ON
-        #   "Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled true",
-        #   #! ENSURE RDP IS ENABLED
-        #   "Set-ItemProperty -Path 'HKLM:/System/CurrentControlSet/Control/Terminal Server' -name 'fDenyTSConnections' -Value 0",
-        #   "netsh advfirewall firewall add rule name='allow RemoteDesktop' dir=in protocol=TCP localport=3389 action=allow"
-        # ]
       }
       network_interface {
         ipv4_address = "${var.network-setup[var.deploy_vsphere_network].ip_network_prefix}${var.ip_first_address + count.index}"
