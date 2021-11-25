@@ -34,7 +34,7 @@ catch {
 }
 'Remote Desktop Enabled' | Out-File "$admin_folder\ps_actions.txt"
 #
-# ─── SHOW HIDDEEN AND SYSYTEM FILES ─────────────────────────────────────────────
+# ─── SHOW HIDDEEN AND SYSYTEM FILES IN EXPLORER ─────────────────────────────────────────────
 #
 $regPath = 'HKCU:Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
 # show hidden files.
